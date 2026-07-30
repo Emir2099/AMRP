@@ -1,0 +1,34 @@
+===  script2.py Verified Output  ===
+Run: 2026-07-29  |  n=10 seeds  |  T=2000ms  |  Brian2
+
+Seeds: [42, 123, 456, 789, 101, 202, 303, 404, 505, 606]
+Noise levels: [1, 2, 5, 10, 20] Hz
+
+=== MULTI-SEED SUMMARY (mean +- std, n=10 seeds) ===
+
+20Hz summary (used in manuscript Energy Overhead paragraph):
+  NVM_red  = 191.189 +- 17.402x
+  Ent_red  = 239.202 +- 71.974x
+  Sep_STDP = -0.128445 +- 0.022373
+  Sep_AMRP = -0.000707 +- 0.002165
+
+  Write events | STDP = 395581.7 +- 16182.2
+  Write events | AMRP = 400329.3 +- 16418.9
+  Event diff   = +1.200%
+
+Manuscript figure (rounded):
+  "Standard STDP and AMRP produced 395,582 +- 16,182 and 400,329 +- 16,419
+   write-triggering events respectively - a +1.2% mean difference"
+
+STATUS: VERIFIED numbers match simulation output exactly.
+
+Counter implementation:
+  - n_events += 1  in on_pre  (STDP_MODEL,   amrp_simulation.py L138)
+  - n_events += 1  in on_post (STDP_MODEL,   amrp_simulation.py L144)
+  - n_events += 1  in on_pre  (AMRP_MODEL, amrp_simulation.py L164)
+  - n_events += 1  in on_post (AMRP_MODEL, amrp_simulation.py L169)
+
+Interpretation:
+  AMRP does NOT reduce write-trigger event count (+1.2% vs STDP, statistically noise).
+  The NVM wear reduction (191x at 20Hz) comes entirely from H_R(t) gating the
+  magnitude of dw per event - not from triggering fewer synaptic update calls.

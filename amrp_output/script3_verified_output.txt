@@ -1,0 +1,49 @@
+===  script3.py  -- Verified Output  ===
+Run: 2026-07-30  |  n=5 seeds  |  T=2000ms  |  Brian2  |  r_noise=10 Hz
+Seeds: [42, 123, 456, 789, 101]
+Grid: theta_noise x tau_astro  (5 x 4 = 20 cells)
+
+=== RAW SCRIPT OUTPUT (mean +- std, write-operation units) ===
+
+theta=0.3  tau=50ms   NVM=154.291 +- 15.481   sep=-0.0068 +- 0.0028
+theta=0.3  tau=100ms  NVM=25.381  +- 5.923    sep=-0.0012 +- 0.0020
+theta=0.3  tau=150ms  NVM=11.451  +- 1.670    sep=-0.0005 +- 0.0019
+theta=0.3  tau=200ms  NVM=9.372   +- 0.926    sep=-0.0005 +- 0.0019
+theta=0.7  tau=50ms   NVM=291.761 +- 22.024   sep=-0.0113 +- 0.0048
+theta=0.7  tau=100ms  NVM=50.032  +- 12.045   sep=-0.0021 +- 0.0029
+theta=0.7  tau=150ms  NVM=20.477  +- 3.190    sep=-0.0008 +- 0.0028
+theta=0.7  tau=200ms  NVM=16.170  +- 1.563    sep=-0.0006 +- 0.0028
+theta=1.0  tau=50ms   NVM=438.560 +- 22.082   sep=-0.0147 +- 0.0068
+theta=1.0  tau=100ms  NVM=81.296  +- 19.790   sep=-0.0032 +- 0.0036
+theta=1.0  tau=150ms  NVM=30.378  +- 5.094    sep=-0.0010 +- 0.0035
+theta=1.0  tau=200ms  NVM=23.052  +- 2.220    sep=-0.0007 +- 0.0035
+theta=1.5  tau=50ms   NVM=731.459 +- 11.114   sep=-0.0171 +- 0.0102
+theta=1.5  tau=100ms  NVM=174.073 +- 40.444   sep=-0.0062 +- 0.0049
+theta=1.5  tau=150ms  NVM=55.536  +- 10.991   sep=-0.0014 +- 0.0044
+theta=1.5  tau=200ms  NVM=38.228  +- 3.827    sep=-0.0008 +- 0.0043
+theta=2.5  tau=50ms   NVM=1147.344+- 77.262   sep=-0.0108 +- 0.0131
+theta=2.5  tau=100ms  NVM=587.920 +- 68.580   sep=-0.0147 +- 0.0101
+theta=2.5  tau=150ms  NVM=173.680 +- 47.597   sep=-0.0041 +- 0.0061
+theta=2.5  tau=200ms  NVM=87.508  +- 13.057   sep=-0.0009 +- 0.0059
+
+=== MANUSCRIPT TABLE VALUES (rounded) -- ALL 20 CELLS VERIFIED ===
+
+theta \ tau    50ms          100ms        150ms        200ms
+0.3        154 +- 15      25 +- 6      11 +- 2      9.4 +- 0.9   <- GRID MIN
+0.7        292 +- 22      50 +- 12     20 +- 3      16  +- 2
+1.0        439 +- 22      81 +- 20     30 +- 5      23  +- 2
+1.5        731 +- 11     174 +- 40     56 +- 11     38  +- 4
+2.5       1147 +- 77     588 +- 69    174 +- 48     88  +- 13    <- GRID MAX
+
+STATUS: VERIFIED -- all 20 cells match script3.py output exactly (to rounding).
+
+MONOTONICITY CHECK:
+  Along tau axis (fixed theta): NVM decreases as tau increases -- HOLDS for all 5 rows.
+  Along theta axis (fixed tau): NVM increases as theta increases -- HOLDS for all 4 columns.
+
+KEY CELLS CITED IN MANUSCRIPT:
+  Grid minimum : theta=0.3, tau=200ms  -> NVM=9.4 +- 0.9   (optimal point)
+  Grid maximum : theta=2.5, tau=50ms   -> NVM=1147 +- 77   (true worst cell, 122x above min)
+  tau contrast : theta=0.3, tau=50ms   -> NVM=154 +- 15    (tau=50ms penalty at optimal theta)
+  Ratio 154/9.4 = 16.4x  (reported as 16x in manuscript -- correct)
+  Ratio 1147/9.4 = 122x  (reported in corrected Section 6.3 -- correct)
