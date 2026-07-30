@@ -1,6 +1,6 @@
 import warnings, numpy as np
 warnings.filterwarnings('ignore')
-import husains_rule_simulation as sim
+import amrp_simulation as sim
 from brian2 import *
 import importlib; importlib.reload(sim)
 
@@ -16,7 +16,7 @@ for seed in SEEDS:
     print(f'seed={seed}', end=' ', flush=True)
     for theta in THETA_G:
         for tau_ms in TAU_G:
-            res = sim.run_experiment(10*Hz, use_husain=True, tau_astro=tau_ms*ms,
+            res = sim.run_experiment(10*Hz, use_amrp=True, tau_astro=tau_ms*ms,
                                      theta_noise=float(theta), record_traces=False,
                                      seed_val=seed)
             nvm_all[(theta, tau_ms)].append(res['nvm_wear'])
