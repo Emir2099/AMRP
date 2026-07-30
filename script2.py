@@ -36,4 +36,4 @@ for nr_hz in NOISES:
             f'AMRP={np.mean(d["evt_h"]):.0f}±{np.std(d["evt_h"]):.0f} | '
             f'diff={100 * (np.mean(d["evt_h"]) - np.mean(d["evt_s"])) / np.mean(d["evt_s"]):+.1f}% | '
           f'Sep_STDP={np.mean(d["sep_s"]):.4f}±{np.std(d["sep_s"]):.4f} | '
-          f'Sep_H={np.mean(d["sep_h"]):.4f}±{np.std(d["sep_h"]):.4f}')
+          f'Sep_AMRP={np.mean(d["sep_h"]):.4f}±{np.std(d["sep_h"]):.4f}')
