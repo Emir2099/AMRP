@@ -1,0 +1,92 @@
+script7_additive_final.py
+Locked β = 1.5874  (from script6_additive_beta_sweep.py)
+Seeds B: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  (n=10)
+Seeds C: [42, 123, 456, 789, 101]  (n=5)
+
+======================================================================
+EXPERIMENT B — SNR sweep (n=10 seeds)
+  Conditions: STDP | AMRP | Additive(β=1.5874)
+======================================================================
+
+  noise= 1 Hz
+    STDP     ...  NVM=40.6488±11.9411  sep=0.0416±0.0079
+    AMRP     ...  NVM=32.0850±8.6770  sep=0.0327±0.0055
+    Add(β=1.5874)...  NVM=89.0652±21.0865  sep=0.0146±0.0055
+    NVM reduction vs STDP:  AMRP=1.27×  Add=0.46×
+    G(STDP                ) = +0.9098
+    G(AMRP                ) = +0.6698
+    G(Add(β=1.5874)       ) = -0.6000
+
+  noise= 2 Hz
+    STDP     ...  NVM=75.6763±15.5320  sep=0.0458±0.0087
+    AMRP     ...  NVM=56.0151±9.9466  sep=0.0335±0.0064
+    Add(β=1.5874)...  NVM=153.5274±26.0479  sep=0.0027±0.0058
+    NVM reduction vs STDP:  AMRP=1.35×  Add=0.49×
+    G(STDP                ) = +0.8790
+    G(AMRP                ) = +0.7137
+    G(Add(β=1.5874)       ) = -0.6000
+
+  noise= 5 Hz
+    STDP     ...  NVM=341.0955±48.8734  sep=0.0442±0.0108
+    AMRP     ...  NVM=150.6402±9.2909  sep=0.0153±0.0060
+    Add(β=1.5874)...  NVM=306.7918±11.7458  sep=-0.0257±0.0049
+    NVM reduction vs STDP:  AMRP=2.26×  Add=1.11×
+    G(STDP                ) = +0.4000
+    G(AMRP                ) = +0.5866
+    G(Add(β=1.5874)       ) = -0.4919
+
+  noise=10 Hz
+    STDP     ...  NVM=1341.6790±133.8367  sep=-0.0177±0.0093
+    AMRP     ...  NVM=75.4671±10.2848  sep=-0.0043±0.0013
+    Add(β=1.5874)...  NVM=470.6572±23.4610  sep=-0.0017±0.0020
+    NVM reduction vs STDP:  AMRP=17.78×  Add=2.85×
+    G(STDP                ) = -0.6000
+    G(AMRP                ) = +0.8329
+    G(Add(β=1.5874)       ) = +0.8127
+
+  noise=20 Hz
+    STDP     ...  NVM=4205.5121±255.9704  sep=-0.1276±0.0164
+    AMRP     ...  NVM=22.5901±1.4089  sep=-0.0009±0.0017
+    Add(β=1.5874)...  NVM=800.6616±36.7048  sep=0.0000±0.0000
+    NVM reduction vs STDP:  AMRP=186.17×  Add=5.25×
+    G(STDP                ) = -0.6000
+    G(AMRP                ) = +0.9926
+    G(Add(β=1.5874)       ) = +0.8884
+
+--- Pre-registered outcome verdict (Experiment B) ---
+  AMRP NVM lower at every noise level: True
+  AMRP signal sep comparable/better:   False
+  VERDICT: TIE / MIXED — examine per-noise breakdown above.
+
+======================================================================
+EXPERIMENT C — θ_noise × τ_astro grid (n=5 seeds, 10 Hz)
+  AMRP vs Additive(β=1.5874)
+======================================================================
+  θ=0.50  τ= 50ms  AMRP NVM=214.6237 sep=-0.0090 | Add  NVM=431.6326 sep=-0.0028
+  θ=0.50  τ=100ms  AMRP NVM=35.7997 sep=-0.0016 | Add  NVM=459.5996 sep=-0.0023
+  θ=0.50  τ=150ms  AMRP NVM=15.4452 sep=-0.0007 | Add  NVM=462.8148 sep=-0.0022
+  θ=0.50  τ=200ms  AMRP NVM=12.4439 sep=-0.0005 | Add  NVM=463.1426 sep=-0.0022
+  θ=1.00  τ= 50ms  AMRP NVM=438.5603 sep=-0.0147 | Add  NVM=418.1642 sep=-0.0040
+  θ=1.00  τ=100ms  AMRP NVM=81.2959 sep=-0.0032 | Add  NVM=458.4116 sep=-0.0024
+  θ=1.00  τ=150ms  AMRP NVM=30.3782 sep=-0.0010 | Add  NVM=466.1237 sep=-0.0022
+  θ=1.00  τ=200ms  AMRP NVM=23.0519 sep=-0.0007 | Add  NVM=466.6909 sep=-0.0023
+  θ=1.50  τ= 50ms  AMRP NVM=731.4592 sep=-0.0171 | Add  NVM=469.5272 sep=-0.0080
+  θ=1.50  τ=100ms  AMRP NVM=174.0727 sep=-0.0062 | Add  NVM=457.0267 sep=-0.0027
+  θ=1.50  τ=150ms  AMRP NVM=55.5362 sep=-0.0014 | Add  NVM=472.1421 sep=-0.0023
+  θ=1.50  τ=200ms  AMRP NVM=38.2276 sep=-0.0008 | Add  NVM=473.2548 sep=-0.0023
+  θ=2.00  τ= 50ms  AMRP NVM=989.6348 sep=-0.0146 | Add  NVM=745.7324 sep=-0.0182
+  θ=2.00  τ=100ms  AMRP NVM=342.0576 sep=-0.0106 | Add  NVM=457.5270 sep=-0.0034
+  θ=2.00  τ=150ms  AMRP NVM=98.5075 sep=-0.0023 | Add  NVM=480.5639 sep=-0.0024
+  θ=2.00  τ=200ms  AMRP NVM=58.9213 sep=-0.0008 | Add  NVM=482.9574 sep=-0.0024
+  θ=2.50  τ= 50ms  AMRP NVM=1147.3438 sep=-0.0108 | Add  NVM=1125.0923 sep=-0.0324
+  θ=2.50  τ=100ms  AMRP NVM=587.9196 sep=-0.0147 | Add  NVM=486.3227 sep=-0.0058
+  θ=2.50  τ=150ms  AMRP NVM=173.6804 sep=-0.0041 | Add  NVM=489.7722 sep=-0.0026
+  θ=2.50  τ=200ms  AMRP NVM=87.5085 sep=-0.0009 | Add  NVM=495.2932 sep=-0.0023
+
+--- Goldilocks advantage matrix ΔΔΔG = G_AMRP − G_add (+ = AMRP better) ---
+  θ\τ       50ms     100ms     150ms     200ms
+  θ=0.5   -0.400  +1.600  +1.600  +1.600
+  θ=1.0   -1.600  -0.400  +1.600  +1.600
+  θ=1.5   -1.600  -0.400  +1.600  +1.600
+  θ=2.0   +0.400  -0.400  +1.600  +1.600
+  θ=2.5   +0.400  -1.600  -0.400  +1.600

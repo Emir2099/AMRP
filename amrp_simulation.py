@@ -1,7 +1,8 @@
 """
 amrp_simulation.py  v1.0
 =================================
-Brian2 A/B test: Standard STDP (control) vs AMRP (experimental)
+Brian2 three-way test: Standard STDP (control) vs AMRP (experimental)
+vs Additive-Gating ablation (heterosynaptic depression baseline)
 for memristive neuromorphic crossbar arrays.
 
 ─── FORMAL LEARNING RULE ──────────────────────────────────────────────────────
@@ -16,6 +17,10 @@ for memristive neuromorphic crossbar arrays.
 
   Modified weight update (AMRP):
       Δw_ij = H_R(t) · f_STDP(Δt_ij)
+
+  Additive-gating ablation (heterosynaptic depression baseline):
+      Δw_ij = f_STDP(Δt_ij) − β · (1 − H_R(t)) · A_plus
+      Applied at every STDP event (both pre and post); clamped identically.
 
 ─── NORMALISATION NOTE ────────────────────────────────────────────────────────
   Each STM spike contributes SPIKE_INCR = 1/N_STM to ρ_R, so at steady
@@ -178,6 +183,8 @@ AMRP_ON_POST = '''
 def run_experiment(
     noise_rate,
     use_amrp      : bool  = True,
+    use_additive  : bool  = False,   # additive-gating ablation
+    beta          : float = 1.0,     # depression scale (only when use_additive)
     tau_astro           = None,
     theta_noise   : float = None,
     k_sharp       : float = None,
@@ -186,12 +193,17 @@ def run_experiment(
     verbose       : bool  = False,
 ) -> dict:
     """
-    Run one complete simulation trial (control OR experimental).
+    Run one complete simulation trial (STDP / AMRP / additive-gating ablation).
 
     Parameters
     ----------
     noise_rate    : Brian2 quantity in Hz — Poisson background rate
-    use_amrp      : True = AMRP;  False = standard STDP
+    use_amrp      : True = AMRP multiplicative gate;  False = STDP (or additive)
+    use_additive  : True = additive depression ablation.  Requires use_amrp=False.
+                    Shares identical astrocyte, connectivity, and seed order with AMRP.
+    beta          : heterosynaptic depression scale for additive rule.  Baked into
+                    compiled C++ at model-creation time via f-string; no runtime
+                    state-variable overhead.
     tau_astro     : astrocytic τ (Brian2 ms quantity).  None → default.
     theta_noise   : spike-density threshold.            None → default.
     k_sharp       : sigmoid slope.                      None → default.
@@ -203,6 +215,11 @@ def run_experiment(
     -------
     dict of arrays and scalar metrics — see keys below.
     """
+    if use_amrp and use_additive:
+        raise ValueError(
+            'use_amrp and use_additive are mutually exclusive. '
+            'Set exactly one to True.'
+        )
     start_scope()
     np.random.seed(seed_val)
     seed(seed_val)
@@ -262,9 +279,33 @@ def run_experiment(
     syn_stm_astro.connect(j='0')   # all N_STM neurons → single astrocyte neuron
 
     # ── 7. Plastic STM → LTM synapses ────────────────────────────────────────
+    # Three branches share identical connectivity generation and seed order.
+    # Only on_pre/on_post strings differ between AMRP and additive.
     if use_amrp:
         syn = Synapses(stm, ltm, model=AMRP_MODEL,
                        on_pre=AMRP_ON_PRE, on_post=AMRP_ON_POST)
+    elif use_additive:
+        # Additive-gating ablation: Δw = f_STDP(Δt) − β·(1−H_R)·A_plus
+        # β is baked into the compiled C++ string — no runtime variable needed.
+        # Depression term is subtracted at EVERY event (pre and post), consistent
+        # with Tang et al. heterosynaptic depression structure.
+        # Reuses AMRP_MODEL verbatim because it already declares HR_syn.
+        _b = float(beta)
+        _ADD_ON_PRE = f'''
+    v_post       += w
+    Apre         += A_PLUS
+    w             = clip(w + Apost - {_b} * (1.0 - HR_syn) * A_PLUS, W_MIN, W_MAX)
+    total_abs_dw += abs(Apost - {_b} * (1.0 - HR_syn) * A_PLUS)
+    n_events     += 1
+'''
+        _ADD_ON_POST = f'''
+    Apost        -= A_MINUS
+    w             = clip(w + Apre - {_b} * (1.0 - HR_syn) * A_PLUS, W_MIN, W_MAX)
+    total_abs_dw += abs(Apre - {_b} * (1.0 - HR_syn) * A_PLUS)
+    n_events     += 1
+'''
+        syn = Synapses(stm, ltm, model=AMRP_MODEL,
+                       on_pre=_ADD_ON_PRE, on_post=_ADD_ON_POST)
     else:
         syn = Synapses(stm, ltm, model=STDP_MODEL,
                        on_pre=STDP_ON_PRE, on_post=STDP_ON_POST)
@@ -273,12 +314,13 @@ def run_experiment(
     syn.w            = 0.5   # midpoint initialisation
     syn.total_abs_dw = 0.0
     syn.n_events     = 0.0
-    if use_amrp:
+    if use_amrp or use_additive:
         syn.HR_syn = 1.0     # gate fully open at t=0
 
     # ── 8. Broadcast H_R(t) to all plastic synapses every timestep ───────────
-    #   network_operation captures 'syn' and 'astrocyte' via closure.
-    if use_amrp:
+    #   Both AMRP and additive consume H_R(t); they combine it differently.
+    #   Guard covers both so neither condition runs with a static HR_syn=1.0.
+    if use_amrp or use_additive:
         @network_operation(dt=DT)
         def push_hr():
             syn.HR_syn = float(astrocyte.HR[0])
@@ -289,7 +331,7 @@ def run_experiment(
 
     mon_astro = (
         StateMonitor(astrocyte, ['rho', 'HR'], record=True)
-        if (use_amrp and record_traces) else None
+        if ((use_amrp or use_additive) and record_traces) else None
     )
     # Record a fixed 30-synapse slice; with p=0.3 and 1800 possible pairs
     # the expected synapse count is ~540, so 30 is always safe.
@@ -299,7 +341,7 @@ def run_experiment(
     objs = [inp, stm, ltm, astrocyte,
             syn_in, syn_stm_astro, syn,
             sp_inp, sp_stm, mon_wt]
-    if use_amrp:
+    if use_amrp or use_additive:
         objs.append(push_hr)
     if mon_astro is not None:
         objs.append(mon_astro)

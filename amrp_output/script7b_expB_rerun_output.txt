@@ -1,0 +1,57 @@
+script7b_expB_rerun.py
+Seeds B (Table 2 match): [42, 123, 456, 789, 101, 202, 303, 404, 505, 606]  n=10
+Beta (locked): 1.5874
+======================================================================
+EXPERIMENT B RERUN -- SNR sweep (n=10 seeds, corrected seeds)
+  Conditions: STDP | AMRP | Additive(b=1.5874)
+======================================================================
+
+  noise= 1 Hz
+    STDP     ...  NVM=39.9858+/-10.9796  sep=0.0407+/-0.0070
+    AMRP     ...  NVM=31.4823+/-7.9225  sep=0.0320+/-0.0050
+    Add(b=1.5874)...  NVM=88.8533+/-20.7944  sep=0.0133+/-0.0041
+    NVM reduction vs STDP:  AMRP=1.27x  Add=0.45x
+    G(STDP                  ) = +0.9111
+    G(AMRP                  ) = +0.6808
+    G(Add(b=1.5874)         ) = -0.6000
+
+  noise= 2 Hz
+    STDP     ...  NVM=78.8714+/-18.7496  sep=0.0473+/-0.0064
+    AMRP     ...  NVM=57.4486+/-11.5174  sep=0.0341+/-0.0035
+    Add(b=1.5874)...  NVM=160.2359+/-33.1294  sep=0.0047+/-0.0070
+    NVM reduction vs STDP:  AMRP=1.37x  Add=0.49x
+    G(STDP                  ) = +0.8749
+    G(AMRP                  ) = +0.6900
+    G(Add(b=1.5874)         ) = -0.6000
+
+  noise= 5 Hz
+    STDP     ...  NVM=344.1144+/-50.5457  sep=0.0428+/-0.0066
+    AMRP     ...  NVM=146.6129+/-7.9825  sep=0.0141+/-0.0032
+    Add(b=1.5874)...  NVM=304.1193+/-8.7928  sep=-0.0231+/-0.0043
+    NVM reduction vs STDP:  AMRP=2.35x  Add=1.13x
+    G(STDP                  ) = +0.4000
+    G(AMRP                  ) = +0.5647
+    G(Add(b=1.5874)         ) = -0.4785
+
+  noise=10 Hz
+    STDP     ...  NVM=1317.6361+/-145.7194  sep=-0.0124+/-0.0188
+    AMRP     ...  NVM=75.9868+/-17.8676  sep=-0.0030+/-0.0027
+    Add(b=1.5874)...  NVM=463.6296+/-19.4667  sep=-0.0021+/-0.0013
+    NVM reduction vs STDP:  AMRP=17.34x  Add=2.84x
+    G(STDP                  ) = -0.6000
+    G(AMRP                  ) = +0.9152
+    G(Add(b=1.5874)         ) = +0.8127
+
+  noise=20 Hz
+    STDP     ...  NVM=4167.6008+/-207.5793  sep=-0.1284+/-0.0224
+    AMRP     ...  NVM=21.9121+/-1.5807  sep=-0.0007+/-0.0022
+    Add(b=1.5874)...  NVM=793.1071+/-29.2024  sep=-0.0002+/-0.0004
+    NVM reduction vs STDP:  AMRP=190.20x  Add=5.25x
+    G(STDP                  ) = -0.6000
+    G(AMRP                  ) = +0.9958
+    G(Add(b=1.5874)         ) = +0.8884
+
+--- Pre-registered outcome verdict (Experiment B, corrected seeds) ---
+  AMRP NVM lower at every noise level: True
+  AMRP signal sep comparable/better:   False
+  CODED VERDICT: TIE / MIXED -- examine per-noise breakdown above.

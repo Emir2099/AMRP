@@ -1,0 +1,36 @@
+script8_saturation_check.py
+Condition: Additive(b=1.5874), noise=20 Hz
+Seeds: [42, 123, 456, 789, 101, 202, 303, 404, 505, 606]  n=10
+W_MIN=0.0  W_MAX=1.0  clamp_tol=0.001
+======================================================================
+
+  seed=42 ...  sep=0.000000  std(w)=0.000000  at_min=1.000  at_max=0.000  w_range=[0.0000,0.0000]
+
+  seed=123 ...  sep=-0.000241  std(w)=0.001848  at_min=0.988  at_max=0.000  w_range=[0.0000,0.0254]
+
+  seed=456 ...  sep=0.000000  std(w)=0.000000  at_min=1.000  at_max=0.000  w_range=[0.0000,0.0000]
+
+  seed=789 ...  sep=0.000000  std(w)=0.000000  at_min=1.000  at_max=0.000  w_range=[0.0000,0.0000]
+
+  seed=101 ...  sep=0.000000  std(w)=0.000000  at_min=1.000  at_max=0.000  w_range=[0.0000,0.0000]
+
+  seed=202 ...  sep=0.000000  std(w)=0.000000  at_min=1.000  at_max=0.000  w_range=[0.0000,0.0000]
+
+  seed=303 ...  sep=0.000000  std(w)=0.000000  at_min=1.000  at_max=0.000  w_range=[0.0000,0.0000]
+
+  seed=404 ...  sep=0.000000  std(w)=0.000000  at_min=1.000  at_max=0.000  w_range=[0.0000,0.0000]
+
+  seed=505 ...  sep=-0.001477  std(w)=0.011341  at_min=0.990  at_max=0.000  w_range=[0.0000,0.1396]
+
+  seed=606 ...  sep=0.000000  std(w)=0.000000  at_min=1.000  at_max=0.000  w_range=[0.0000,0.0000]
+
+--- Summary across seeds ---
+  sep:       mean=-0.000172  std=0.000441
+  frac@W_MIN: mean=0.998  std=0.004
+  frac@W_MAX: mean=0.000  std=0.000
+  std(w):     mean=0.001319  std=0.003386
+
+--- Saturation diagnosis ---
+  SATURATED: 99.8% of weights at clamp boundary.
+  sep=0 reflects collapsed weight variance, NOT informative learning.
+  Top-quartile vs rest comparison is degenerate when all weights are equal.
